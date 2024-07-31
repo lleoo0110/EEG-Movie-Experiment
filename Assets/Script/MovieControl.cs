@@ -13,7 +13,9 @@ public class MovieControl : MonoBehaviour
     public static MovieControl instance;
     private UdpClient udpClient;
     private string ipAddress = "127.0.0.1";
-    private int port = 12354;
+    private int port = 12345;
+    private bool isMovieStarted = false; // 動画が開始されたかどうかを追跡する変数
+
     void Start()
     {
         if (instance == null)
@@ -30,12 +32,18 @@ public class MovieControl : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Return)){
-
-            Debug.Log("Movie Start");
-            videoPlayer.Play();
-            SendData("MovieStart");
+        if (Input.GetKeyDown(KeyCode.Return) && !isMovieStarted)
+        {
+            StartMovie();
         }
+    }
+
+    private void StartMovie()
+    {
+        Debug.Log("Movie Start");
+        videoPlayer.Play();
+        SendData("MovieStart");
+        isMovieStarted = true; // 動画が開始されたことをマーク
     }
 
     public void SendData(string data) 
